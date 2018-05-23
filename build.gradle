@@ -1,3 +1,45 @@
-group 'me.ddevil'
-version '0.0.1-SNAPSHOT'
+allprojects {
+    it.group = 'me.ddevil'
+    it.version = '0.0.1-SNAPSHOT'
+    afterEvaluate {
+        if (isDefined(it.ext, bot_module_key)) {
+            setupModule(it)
+        }
+    }
+}
+buildscript {
+    ext.kotlin_version = '1.2.41'
+    ext.bot_module_key = 'bot_module'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
 
+
+boolean isDefined(ExtraPropertiesExtension extensionContainer, String key) {
+    return extensionContainer.has(key) && extensionContainer[key]
+}
+
+void setupModule(Project p) {
+    p.plugins.apply('kotlin')
+    p.repositories {
+        mavenCentral()
+    }
+    p.dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    }
+    p.compileKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+    p.compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+}
