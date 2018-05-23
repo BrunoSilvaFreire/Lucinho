@@ -8,6 +8,9 @@ allprojects {
     }
 }
 buildscript {
+    ext.json_version = '1.0.0-SNAPSHOT'
+    ext.kotlin_utils_version = '1.0.0-SNAPSHOT'
+    ext.jda_version = '3.6.0_367'
     ext.kotlin_version = '1.2.41'
     ext.bot_module_key = 'bot_module'
     repositories {
@@ -26,10 +29,18 @@ boolean isDefined(ExtraPropertiesExtension extensionContainer, String key) {
 void setupModule(Project p) {
     p.plugins.apply('kotlin')
     p.repositories {
+        jcenter()
         mavenCentral()
+        maven {
+            name = "ddevil"
+            url = "http://repo.imddevil.com/repository/maven-snapshots/"
+        }
     }
     p.dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        compile "net.dv8tion:JDA:$jda_version"
+        compile "me.ddevil:json:$json_version"
+        compile "me.ddevil:kotlin-utils:$kotlin_utils_version"
     }
     p.compileKotlin {
         kotlinOptions {
